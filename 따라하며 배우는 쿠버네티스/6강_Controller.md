@@ -29,7 +29,7 @@ k8s v1에서 만들어졌다.
         - pod 개수
     - template
         - 부족하면 생성할 pod 의 yaml
-    - ```yaml
+          ```yaml
 apiVersion: v1
 kind: ReplicationController
 metadata:
@@ -311,7 +311,7 @@ spec:
 
 쿠버네티스 동작 방식 서포트.
 
-- `⁠kubernetes.io/change-cause: version 1.14`  
+- `⁠kubernetes.io/change-cause: version 1.14`
     - 이 버전이름으로 history 가 남겨진다.
     - 다음에 이 yaml에서 위 버전을 수정해주면 Rolling Update가 된다. yaml로 하는 것이다.
     - 마찬가지로 history 명령어로 확인 가능.
