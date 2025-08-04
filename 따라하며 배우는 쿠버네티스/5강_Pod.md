@@ -438,19 +438,19 @@ sepc:
 - Pod 실행 시 미리 정의된 컨테이너 환경변수를 변경할 수 있다.
     - 예) 1.19.2를 1.20.3으로 바꿀 수 있나?
     - yaml 에서 `sepc.containers.env` 를 설정하면 된다.
-    - ```yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: env-pod
-spec:
-  containers:
-  - name: app
-    image: nginx
-    env:
-    - name: MY_VAR
-      value: "hello"
-```
+    -  ```yaml
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: env-pod
+        spec:
+          containers:
+          - name: app
+            image: nginx
+            env:
+            - name: MY_VAR
+              value: "hello"
+        ```
 
 <br>
 
