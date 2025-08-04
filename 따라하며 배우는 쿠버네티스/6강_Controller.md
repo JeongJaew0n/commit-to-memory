@@ -29,18 +29,18 @@ k8s v1에서 만들어졌다.
         - pod 개수
     - template
         - 부족하면 생성할 pod 의 yaml
-          ```yaml
-apiVersion: v1
-kind: ReplicationController
-metadata:
-  name: <RC_이름>
-spec:
-  replicas: <배포개수>
-  selector:
-    key: value
-  template:
-    <컨테이너 템플릿>
-```
+        ```yaml
+        apiVersion: v1
+        kind: ReplicationController
+        metadata:
+          name: <RC_이름>
+        spec:
+          replicas: <배포개수>
+          selector:
+            key: value
+          template:
+            <컨테이너 템플릿>
+        ```
 
 <br>
 
