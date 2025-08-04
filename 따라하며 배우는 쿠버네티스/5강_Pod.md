@@ -193,20 +193,20 @@ probe: 조사(탐색)
 - tcpSocket
     - 지정된 포트에 TCP 연결을 시도하여 연결되지 않으면 컨테이너를 다시 시작한다.
     - ```yaml
-livenessProbe:
-  tcpSocket:
-    port: 22
-```
+      livenessProbe:
+        tcpSocket:
+        port: 22
+      ```
 
 - exec
     - exec 명령을 전달하고 명령의 종료코드가 0이 아니면 컨테이너를 다시 시작한다.
     - ```yaml
-livenessProbe:
-  exec:
-    command:
-    - ls
-    - /data/file
-```
+       livenessProbe:
+         exec:
+           command:
+        - ls
+          - /data/file
+       ```
 
 ### 매개변수
 
