@@ -393,3 +393,63 @@ spec:
 **Rolling Backup**
 
 - `kubectl rollout undo daemonset <daemonset_name>`
+
+## 6-5. StatefulSet
+
+### 소⁠개
+
+Pod의 상태를 유지해주는 컨트롤러
+
+- Pod 이름
+- Pod의 볼륨
+
+컨트롤러에서 만들어지는 Pod는 랜덤 해시값을 사용함.
+
+그래서 ⁠pod-2ccm9 이런식의 이름이될 텐데, SF를 쓰면 pod-0, pod-1 이런식으로 일정하게 번호가 늘어나는 이름을 가짐.
+
+<br>
+
+DaemonSet과의 차이점.
+
+- 노드 당 1개 보장은 아님.
+
+<br>
+
+yaml 예시
+
+```yaml
+apiVersion: apps/v1
+metadata:
+  name: sf-nginx
+spec:
+  replicas: 3
+  serviceName: sf-service
+# podManagementPolicy: OrderedReady
+  podManagementPolicy: Parallel
+  selector:
+    matchLabels:
+      app: webui
+  template:
+```
+
+- serviceName 필수!
+- podManagementPolicy: OrderedReady가 defulat, 순차적으로 실행 됨. Parallel은 0,1,2번을 동시에 실행함.
+
+<br>
+
+**Scale Up & Down**
+
+`kubectl scale sf <sf_name> --replicas=<개수>` 
+
+<br>
+
+**Rolling Update & Rolling Backup 가능**
+
+- `kubectl edit statefulsets.apps <sf_name>` 으로 업데이트.
+    - 최신 생성된 pod부터 종료되고 새로 실행됨.
+    - 예) nginx 1.14에서 1.15로 업데이트 했을 경우 pod-0,1이 있으면 1번이 종료되고 업데이트 된다음 0번이 종료되고 업데이트 됨.
+- `kubectl rollout undo sf <sf_name>` 
+
+<br>
+
+<br>
