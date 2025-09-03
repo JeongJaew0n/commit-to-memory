@@ -453,3 +453,119 @@ spec:
 <br>
 
 <br>
+
+## 6-6. Job Controller
+
+### 쿠버가 Pod 를 실행시키는 원리.
+
+컨테이너를 24/7 계속 실행시킴.
+
+5초 뒤 종료되는 컨테이너를 실행시키는 명령어:⁠`kubectl run testpod --image=centos:7 --command sleep 5` 
+
+- command는 컨테이너에 명령내리는 옵션.
+
+watch 로 확인.
+
+<br>
+
+### 소개
+
+성공적으로 실행 됐는지 검사.
+
+만약 Running 중에 종료되는 것 같이 비정상적으로 종료되면 새로 실행시킴.
+
+- 성공적으로 검사 됐으면 `Completed` 상태로 바꿈.
+    - 왜 성공했을 때 pod를 지우지 않나요? → 그럼 해당 pod의 로그를 확인할 수 없습니다.
+
+주로 batch 작업에서 사용.
+
+<br>
+
+**yaml 예시**
+
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+ name: centos-job
+spec:
+ template:
+  spec:
+   containers:
+   - name: centos-container
+     image: centos:7
+     command: ["bash"]
+     args:
+     - "-c"
+     - "echod 'Hello'; sleep 5; echo 'Bye'"
+     restartyPolicy: Never
+```
+
+- **restartPolicy: 중요함.**
+    - **onFailure: 컨테이너만 재시작함. Pod 아님.**
+    - **Never: Pod를 재시작.**
+- completions: replicas 같은 것. 몇 개까지 완료 상태를 가질거냐.
+- parallelism: 한 번에 실행할 Pod 개수.
+- activeDeadlineSeconds: 적어도 여기 실행되는 어플리케이션이 n 초안에 끝나야 한다. 이 시간안에 안되면 강제로 완료 상태로 만든다.
+
+<br>
+
+<br>
+
+## 6-7. CronJob
+
+Linux의 cronjob 을 옮겨둔 거 맞음.
+
+<br>
+
+- 0 3 1 \* \* 
+    - Minute(0~59)
+    - Hours(0~23)
+    - Day of month(1~31)
+    - Month(1~12)
+    - Day of the week(0 ~ 6)
+
+<br>
+
+Job은 1회성이고 CronJob은 다회성임.
+
+<br>
+
+<br>
+
+**yaml 예시**
+
+```yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+ name: centos-job
+spec:
+ schedule: "*/5 * * * 1-5"
+ startingDeadlineSeconds: 500
+ concurrencyPolicy: Forbid
+ jobTemplate:
+  spec:
+   template:
+    spec: 
+     containers:
+     - name: centos-container
+       image: centos:7
+       command: ["bash"]
+       args:
+       - "-c"
+       - "echo 'Hello'; sleep 5; echo 'Bye'"
+       restartPolicy: Never
+```
+
+<br>
+
+- startingDeadlineSeconds: 500
+    - 500초 안에 jobTemplate 안에 선언되어 있는 어플리케이션이 실행되지 않으면 Job을 취소시키겠다.
+- concurrencyPolicy: Forbid
+    - 안쓰면 Allow가 디폴트. Allow면 작업이 진행 중이더라도 또 실행함.
+    - Forbid: 작업 중(Running 상태)이면 실행 안 시키겠다. 즉, 한 번에 하나만 실행 시키겠다.
+- successfulJobHistoryLimit
+    - 선언 안하면 디폴트로 3이 들어감. 그래서 최대 3개에서 더 안늘어남.
+
+<br>
