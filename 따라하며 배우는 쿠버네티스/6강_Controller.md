@@ -452,7 +452,6 @@ spec:
 
 <br>
 
-<br>
 
 ## 6-6. Job Controller
 
@@ -510,7 +509,6 @@ spec:
 
 <br>
 
-<br>
 
 ## 6-7. CronJob
 
