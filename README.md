@@ -1,2 +1,2 @@
 # commit-to-memory
-그냥 공부한거
+공부 기록용
